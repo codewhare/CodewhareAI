@@ -1,35 +1,90 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { useState } from "react";
+import { Menu, X } from "lucide-react";
+import Image from "next/image";
 
 export function Header() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const navItems = [
+    { href: "#features", label: "Features" },
+    { href: "#pricing", label: "Pricing" },
+    { href: "#how-it-works", label: "How it Works" },
+    { href: "#contact", label: "Contact" },
+  ];
+
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    const element = document.querySelector(href);
+    if (element) {
+      const offset = 80; // Adjust this value based on your header height
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+
+      // Close mobile menu if open
+      setIsMobileMenuOpen(false);
+    }
+  };
+
   return (
-    <header className="relative min-h-[80vh] flex items-center justify-center px-4 bg-gradient-to-br from-black via-blue-950 to-blue-900 overflow-hidden">
-      <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
-      <div className="relative z-10 max-w-6xl mx-auto text-center">
-        <div className="inline-block animate-text-gradient bg-gradient-to-r from-[#b2a8fd] via-[#8678f9] to-[#c7d2fe] bg-[200%_auto] bg-clip-text text-transparent text-sm font-medium mb-4">
-          
-        </div>
-        <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight leading-tight">
-          Empower Your Business with{" "}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">
-            AI-Driven Solutions
-          </span>
-        </h1>
-        <p className="text-xl text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed">
-          Streamline operations, enhance customer experience, and scale your business effortlessly with our tailored AI solutions.
-        </p>
-        <div className="flex gap-4 justify-center">
-          <Button size="lg" variant="default" className="text-base">
-            Get Started Now
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
-          <Button size="lg" variant="outline" className="text-base">
-            Schedule a Free Consultation
-          </Button>
-        </div>
+    <header className="fixed top-0 left-0 right-0 z-50 bg-[#0A0A0A]/80 backdrop-blur-sm">
+      <div className="max-w-[1200px] mx-auto px-6">
+        <nav className="flex items-center justify-between h-[72px]">
+          <div className="flex items-center gap-12">
+            <a href="/" className="hover:opacity-80 transition-opacity duration-300">
+              <Image
+                src="/assets/codewhare-logo.svg"
+                alt="Codewhare"
+                width={140}
+                height={32}
+                className="h-8 w-auto"
+              />
+            </a>
+            <div className="hidden md:flex items-center gap-8">
+              {navItems.map((item) => (
+                <a 
+                  key={item.href}
+                  href={item.href} 
+                  onClick={(e) => handleClick(e, item.href)}
+                  className="relative text-[15px] text-gray-400 hover:text-white transition-colors duration-300 group"
+                >
+                  {item.label}
+                  <span className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
+                </a>
+              ))}
+            </div>
+          </div>
+          <button 
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="md:hidden text-white p-2 hover:bg-white/10 rounded-lg transition-colors duration-300"
+          >
+            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </nav>
+
+        {/* Mobile Menu */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden py-6 border-t border-white/10 animate-fade-in">
+            <div className="flex flex-col gap-6">
+              {navItems.map((item) => (
+                <a 
+                  key={item.href}
+                  href={item.href} 
+                  onClick={(e) => handleClick(e, item.href)}
+                  className="text-[15px] text-gray-400 hover:text-white transition-colors duration-300 hover:translate-x-2 transform"
+                >
+                  {item.label}
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </header>
   );
