@@ -10,7 +10,7 @@ export function Header() {
       <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
       <div className="relative z-10 max-w-6xl mx-auto text-center">
         <div className="inline-block animate-text-gradient bg-gradient-to-r from-[#b2a8fd] via-[#8678f9] to-[#c7d2fe] bg-[200%_auto] bg-clip-text text-transparent text-sm font-medium mb-4">
-          WELCOME TO CODEWHARE AI
+          
         </div>
         <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight leading-tight">
           Empower Your Business with{" "}
